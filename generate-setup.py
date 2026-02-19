@@ -59,6 +59,7 @@ def ask_packages() -> list[str]:
     print()
     print("Enter the packages to install, one per line.")
     print("You can use pip version syntax (e.g. numpy, pandas==3.0, 'numpy>=2.3,<2.4').")
+    print("For GitHub repos: git+https://github.com/user/repo.git")
     print("Press Enter on an empty line when done.")
     print()
 
