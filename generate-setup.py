@@ -10,6 +10,7 @@ Usage:
     python3 generate-setup.py
 """
 
+import json
 import os
 import re
 import stat
@@ -163,6 +164,55 @@ def generate_script(
     """)
 
 
+def generate_notebook(env_name: str, display_name: str, python_version: str) -> dict:
+    """Generate a starter Jupyter notebook with the kernel pre-configured."""
+    return {
+        "nbformat": 4,
+        "nbformat_minor": 5,
+        "metadata": {
+            "kernelspec": {
+                "display_name": f"{display_name} (Python {python_version})",
+                "language": "python",
+                "name": env_name,
+            },
+            "language_info": {
+                "name": "python",
+                "version": python_version,
+            },
+        },
+        "cells": [
+            {
+                "cell_type": "markdown",
+                "metadata": {},
+                "source": [
+                    f"# {display_name}\n",
+                    "\n",
+                    "Verify the environment is working correctly.",
+                ],
+            },
+            {
+                "cell_type": "code",
+                "metadata": {},
+                "source": [
+                    "import sys\n",
+                    "sys.version",
+                ],
+                "outputs": [],
+                "execution_count": None,
+            },
+            {
+                "cell_type": "code",
+                "metadata": {},
+                "source": [
+                    "!pip list",
+                ],
+                "outputs": [],
+                "execution_count": None,
+            },
+        ],
+    }
+
+
 def main():
     print("=" * 60)
     print("  CoCalc Custom Jupyter Kernel — Setup Script Generator")
@@ -201,11 +251,16 @@ def main():
     print(f"--- End of preview ---")
     print()
 
-    confirm = ask(f"Write '{output_filename}' to the current directory?", default="yes")
+    notebook_filename = f"{env_name}-test.ipynb"
+    confirm = ask(
+        f"Write '{output_filename}' and '{notebook_filename}' to the current directory?",
+        default="yes",
+    )
     if confirm.lower() not in ("yes", "y"):
-        print("Aborted. Script was not written.")
+        print("Aborted. Nothing was written.")
         sys.exit(0)
 
+    # Write setup script
     output_path = os.path.join(os.getcwd(), output_filename)
     with open(output_path, "w") as f:
         f.write(script_content)
@@ -214,13 +269,22 @@ def main():
     st = os.stat(output_path)
     os.chmod(output_path, st.st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
 
+    # Write starter notebook
+    notebook_path = os.path.join(os.getcwd(), notebook_filename)
+    notebook = generate_notebook(env_name, display_name, python_version)
+    with open(notebook_path, "w") as f:
+        json.dump(notebook, f, indent=1)
+        f.write("\n")
+
     print()
     print(f"Wrote: {output_path}")
+    print(f"Wrote: {notebook_path}")
     print()
     print("Next steps:")
-    print(f"  1. Run it here:          bash {output_filename}")
-    print(f"  2. Or copy to another CoCalc project and run it there.")
-    print(f"  3. To update packages later, edit the PACKAGES array in")
+    print(f"  1. Run the setup:        bash {output_filename}")
+    print(f"  2. Open the notebook:    {notebook_filename}")
+    print(f"  3. Or copy both files to another CoCalc project.")
+    print(f"  4. To update packages later, edit the PACKAGES array in")
     print(f"     {output_filename} and re-run it.")
 
 

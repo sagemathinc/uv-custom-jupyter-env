@@ -27,20 +27,22 @@ CoCalc project** and run there.
    - **Display name** — what appears in the Jupyter kernel picker, e.g. `My Python Env`
    - **Python version** — e.g. `3.11`
    - **Packages** — enter one per line, press Enter on an empty line when done
-4. The generator writes a file like `my-python-env-setup.sh` in the current directory.
+4. The generator writes two files:
+   - `my-python-env-setup.sh` — the setup script
+   - `my-python-env-test.ipynb` — a starter notebook with the kernel pre-selected
 5. Run the generated script:
    ```bash
    bash my-python-env-setup.sh
    ```
-6. Refresh your Jupyter notebook — the new kernel appears in the kernel picker.
+6. Open `my-python-env-test.ipynb` to verify everything works.
 
 ## Sharing the generated script
 
 The generated `*-setup.sh` script is **completely self-contained**. You can:
 
-- Copy it to another CoCalc project and run it there
-- Send it to students so they can set up the same environment
-- Check it into a course repository
+- Copy both files to another CoCalc project and run the setup there
+- Send them to students so they can set up the same environment
+- Check them into a course repository
 
 Anyone with a CoCalc project can run it — no need to clone this repository.
 
@@ -73,7 +75,8 @@ Display name (shown in the Jupyter kernel picker) [My Python Env]: My Python Env
 Python version [3.11]: 3.14
 
 Enter the packages to install, one per line.
-You can use pip version syntax (e.g. numpy, 'matplotlib<3.10', scipy==1.12.0).
+You can use pip version syntax (e.g. numpy, pandas==3.0, 'numpy>=2.3,<2.4').
+For GitHub repos: git+https://github.com/user/repo.git
 Press Enter on an empty line when done.
 
   package [1]: pandas==3.0
@@ -81,14 +84,16 @@ Press Enter on an empty line when done.
   package [3]: numpy>=2.3,<2.4
   package [4]:
 
-Write 'my-python-env-setup.sh' to the current directory? [yes]: yes
+Write 'my-python-env-setup.sh' and 'my-python-env-test.ipynb' to the current directory? [yes]: yes
 
 Wrote: /home/user/my-python-env-setup.sh
+Wrote: /home/user/my-python-env-test.ipynb
 
 Next steps:
-  1. Run it here:          bash my-python-env-setup.sh
-  2. Or copy to another CoCalc project and run it there.
-  3. To update packages later, edit the PACKAGES array in
+  1. Run the setup:        bash my-python-env-setup.sh
+  2. Open the notebook:    my-python-env-test.ipynb
+  3. Or copy both files to another CoCalc project.
+  4. To update packages later, edit the PACKAGES array in
      my-python-env-setup.sh and re-run it.
 ```
 
