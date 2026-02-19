@@ -15,7 +15,6 @@ import os
 import re
 import stat
 import sys
-import textwrap
 
 
 def ask(prompt: str, *, default: str = "", validate=None) -> str:

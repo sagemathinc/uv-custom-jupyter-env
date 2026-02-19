@@ -106,6 +106,7 @@ Next steps:
 2. **Creates a virtual environment** with `uv venv` (skipped if it already exists).
 3. **Installs packages** with `uv pip install`.
 4. **Registers a Jupyter kernel** via `ipykernel install --user`, making it visible in CoCalc's notebook interface.
+5. **Patches the kernel spec** with CoCalc-specific metadata (priority, description, URL).
 
 ## Package version syntax
 
